@@ -1,0 +1,12 @@
+name: H18 synthetic approval boundary
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    environment: h18-approval-boundary
+    steps:
+      - name: Record synthetic marker
+        run: echo H18-SYNTHETIC-JOB-OK
