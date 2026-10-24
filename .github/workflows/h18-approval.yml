@@ -8,5 +8,15 @@ jobs:
     runs-on: ubuntu-latest
     environment: h18-approval-boundary
     steps:
+      - name: Check synthetic environment secret
+        env:
+          H18_MARKER: ${{ secrets.H18_SYNTHETIC_CANARY }}
+        run: |
+          if [ -n "$H18_MARKER" ]; then
+            echo H18-ENV-SECRET-PRESENT
+          else
+            echo H18-ENV-SECRET-ABSENT
+            exit 1
+          fi
       - name: Record synthetic marker
         run: echo H18-SYNTHETIC-JOB-OK
