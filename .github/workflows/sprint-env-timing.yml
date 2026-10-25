@@ -1,0 +1,24 @@
+name: Sprint synthetic environment timing
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    environment: sprint-env-secret-timing-20261025
+    steps:
+      - name: Classify synthetic canary version
+        shell: bash
+        env:
+          SPRINT_MARKER: ${{ secrets.SPRINT_ENV_CANARY }}
+        run: |
+          digest="$(printf '%s' "$SPRINT_MARKER" | sha256sum | cut -d ' ' -f 1)"
+          if [ "$digest" = "3f8f8d1fd67ec59466cccd5e6f9f3d37085cf9e0c34987a954c030060e4f8dd8" ]; then
+            echo SPRINT-ENV-VERSION-A
+          elif [ "$digest" = "12ee6196482339a0ebc4273c748867c0cf568b83f4976d2138aea3c95b99f777" ]; then
+            echo SPRINT-ENV-VERSION-B
+          else
+            echo SPRINT-ENV-MISSING-OR-OTHER
+            exit 1
+          fi
